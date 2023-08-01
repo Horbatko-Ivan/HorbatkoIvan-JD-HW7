@@ -4,12 +4,13 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class HttpStatusImageDownloader {
 
-    public void downloadStatusImage(int code) {
+    public void downloadStatusImage(int code) throws IOException {
         String url = new HttpStatusChecker().getStatusImage(code);
 
         if (!url.contains("Error request for")) {
@@ -33,13 +34,10 @@ public class HttpStatusImageDownloader {
                         }
                     }
 
-                    System.out.println("Image with code " + code + " downloaded in " + imagePath);
-                } else {
-                    System.out.println("There is not image for HTTP status " + code);
                 }
-            } catch (Exception e) {
-                System.out.println("Exception " + e);
+            } catch (IOException e) {
+                throw new RuntimeException();
             }
-        } else System.out.println("There is not image for HTTP status " + code);
+        }
     }
 }

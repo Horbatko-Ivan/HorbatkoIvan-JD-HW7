@@ -1,5 +1,7 @@
 package org.goit.hw7.html;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class HttpImageStatusCli {
@@ -8,18 +10,19 @@ public class HttpImageStatusCli {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter HTTP status code");
         String httpCode = scanner.nextLine();
-        int code;
-
-        if (!httpCode.matches("^\\d{1,3}$")) {
+        try {
+            int statusCode = Integer.parseInt(httpCode);
+            imageDownload(statusCode);
+        } catch (NumberFormatException | IOException e) {
             System.out.println("Please enter valid number");
-            askStatus();
-        } else {
-            code = Integer.parseInt(httpCode);
-            try {
-                new HttpStatusImageDownloader().downloadStatusImage(code);
-            } catch (Exception e) {
-                System.out.println("There is not image for HTTP status " + code);
-            }
+        }
+    }
+
+    private void imageDownload(int statusCode) throws IOException {
+        try {
+            new HttpStatusImageDownloader().downloadStatusImage(statusCode);
+        } catch (FileNotFoundException e) {
+            System.out.println("There is not image for HTTP status" + statusCode);
         }
     }
 }

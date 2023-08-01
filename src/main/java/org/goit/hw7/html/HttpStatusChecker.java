@@ -3,13 +3,15 @@ package org.goit.hw7.html;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class HttpStatusChecker {
 
+    private static final String BASE_URL = "https://http.cat/";
+
     public String getStatusImage(int code) {
 
-        final String BASE_URL = "https://http.cat/";
         String url = BASE_URL + code + ".jpg";
 
         try {
@@ -18,11 +20,10 @@ public class HttpStatusChecker {
             if (response.statusCode() == 200) {
                 return url;
             } else {
-                return "Error request for " + url;
+                throw new FileNotFoundException();
             }
-
         } catch (IOException e) {
-            return "Error request for " + url;
+            throw new RuntimeException();
         }
     }
 }
